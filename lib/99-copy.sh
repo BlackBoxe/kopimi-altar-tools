@@ -1,5 +1,7 @@
 # copy
 
+K_COPY_COUNT=0
+
 k_get_mp() {
 	local device
 	local mp
@@ -109,8 +111,9 @@ k_copy() {
 		k_log 3 "media '$device', partition '$d' found!"
 		mp=$(k_get_mp $d)
 		if [ -n "$mp" ]; then
-			k_log 3 "media '$device', copying..."
-			k_hook_call_handlers on_copy_started
+			K_COPY_COUNT=$(($K_COPY_COUNT + 1))
+			k_log 3 "media '$device', copy #$K_COPY_COUNT started..."
+			k_hook_call_handlers on_copy_started "$K_COPY_COUNT" "$mp"
 			k_copy_all "OUTGOING-ALWAYS" "$K_DATA_DIR/outgoing/always" "$mp/Kopimi"
 			sync
 			k_copy_random "OUTGOING-RANDOM" "$K_DATA_DIR/outgoing/random" "$mp/Kopimi" $K_COPY_OUTGOING_TIME_LIMIT
@@ -119,8 +122,8 @@ k_copy() {
 			sync
 			k_copy_random "INCOMING" "$mp" "$K_DATA_DIR/incoming" $K_COPY_INCOMING_TIME_LIMIT
 			sync
-			k_log 3 "media '$device', copy done!"
-			k_hook_call_handlers on_copy_ended
+			k_log 3 "media '$device', copy #$K_COPY_COUNT done!"
+			k_hook_call_handlers on_copy_ended "$K_COPY_COUNT" "$mp"
 		fi
 	done
 }
