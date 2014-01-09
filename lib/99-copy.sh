@@ -125,4 +125,8 @@ k_copy() {
 	done
 }
 
-k_hook_register_handler on_media_plugged k_copy
+k_copy_startup() {
+	k_hook_register_handler on_media_plugged k_copy
+}
+
+k_hook_register_handler on_app_started k_copy_startup
