@@ -41,7 +41,7 @@ _END_OF_VERSION_
 
 K_IS_ALIVE=0
 K_TIME_START=0
-K_OPT_VERBOSE=0
+K_LOG_LEVEL=0
 
 k_error() {
 	echo "$K_ME: $@"
@@ -72,13 +72,13 @@ k_get_options() {
 				K_OPT_RUN_DIR=$1
 				;;
 			-v|--verbose)
-				K_OPT_VERBOSE=$(($K_OPT_VERBOSE + 1))
+				K_OPT_LOG_LEVEL=$(($K_OPT_LOG_LEVEL + 1))
 				;;
 			-vv)
-				K_OPT_VERBOSE=$(($K_OPT_VERBOSE + 2))
+				K_OPT_LOG_LEVEL=$(($K_OPT_LOG_LEVEL + 2))
 				;;
 			-vvv)
-				K_OPT_VERBOSE=$(($K_OPT_VERBOSE + 3))
+				K_OPT_LOG_LEVEL=$(($K_OPT_LOG_LEVEL + 3))
 				;;
 			-h|--help)
 				k_usage
@@ -112,7 +112,7 @@ k_log() {
 	level=$1
 	shift
 
-	[ $level -le $K_OPT_VERBOSE ] || return
+	[ $level -le $K_LOG_LEVEL ] || return
 	time_now=$(k_now)
 	t=$(($time_now - $K_TIME_START))
 	h=$(($t / 3600))
@@ -158,6 +158,8 @@ k_startup() {
 		&& . $K_CONFIG_FILE \
 		|| K_error "can't read config file '$K_CONFIG_FILE'"
 
+	if [ -n "$K_OPT_LOG_LEVEL" ]; then
+		K_LOG_LEVEL=$K_OPT_LOG_LEVEL
 	if [ -n "$K_OPT_LOG_FILE" ]; then
 		K_LOG_FILE=$K_OPT_LOG_FILE
 	elif [ -z "$K_LOG_FILE" ]; then
