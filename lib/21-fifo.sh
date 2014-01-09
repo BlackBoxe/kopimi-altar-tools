@@ -35,6 +35,8 @@ k_fifo_wait_for_event() {
 						k_log 1 "ERROR: unknown device type '$TYPE'"
 					fi
 				done
+			elif [ $ACTION = "QUIT" ]; then
+				k_quit
 			else
 				k_log 1 "ERROR: unknown event '$ACTION'"
 			fi
