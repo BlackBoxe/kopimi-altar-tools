@@ -112,7 +112,7 @@ k_copy() {
 		mp=$(k_get_mp $d)
 		if [ -n "$mp" ]; then
 			K_COPY_COUNT=$(($K_COPY_COUNT + 1))
-			k_log 3 "media '$device', copy #$K_COPY_COUNT started..."
+			k_log 2 "media '$device', copy #$K_COPY_COUNT started..."
 			k_hook_call_handlers on_copy_started "$K_COPY_COUNT" "$mp"
 			k_copy_all "OUTGOING-ALWAYS" "$K_DATA_DIR/outgoing/always" "$mp/Kopimi"
 			sync
@@ -122,7 +122,7 @@ k_copy() {
 			sync
 			k_copy_random "INCOMING" "$mp" "$K_DATA_DIR/incoming" $K_COPY_INCOMING_TIME_LIMIT
 			sync
-			k_log 3 "media '$device', copy #$K_COPY_COUNT done!"
+			k_log 2 "media '$device', copy #$K_COPY_COUNT done!"
 			k_hook_call_handlers on_copy_ended "$K_COPY_COUNT" "$mp"
 		fi
 	done
