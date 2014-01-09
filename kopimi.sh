@@ -143,11 +143,6 @@ k_rel2abs() {
 	echo "$r"
 }
 
-k_abort() {
-	k_log 0 "caught ABORT, exiting gracefully"
-	K_IS_ALIVE=0
-}
-
 k_startup() {
 	K_IS_ALIVE=1
 	K_TIME_START=$(k_now)
@@ -212,7 +207,7 @@ k_startup() {
 	k_hook_call_handlers on_app_starting
 	k_hook_call_handlers on_app_started
 
-	trap k_abort INT TERM
+	trap k_quit INT TERM
 
 	k_log 0 "started"
 }
@@ -227,6 +222,10 @@ k_loop() {
 	while [ $K_IS_ALIVE -gt 0 ]; do
 		k_hook_call_handlers on_app_loop
 	done
+}
+
+k_quit() {
+	K_IS_ALIVE=0
 }
 
 k_get_options $@
