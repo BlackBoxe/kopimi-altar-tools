@@ -1,0 +1,77 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          kopimi
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Kopimi Altar daemon
+# Description:       Kopimi Altar daemon
+### END INIT INFO
+
+# Author: Nico <nico@blackboxe.org>
+
+DESC="Kopimi Altar daemon"
+NAME=kopimi.sh
+DAEMON=/opt/kopimi/$NAME
+DAEMON_ARGS="-vvv"
+
+[ -x "$DAEMON" ] || exit 0
+
+. /lib/init/vars.sh
+. /lib/lsb/init-functions
+
+do_start()
+{
+	/opt/kopimi/kopimi-ctl.sh start
+}
+
+do_stop()
+{
+	/opt/kopimi/kopimi-ctl.sh stop
+}
+
+case "$1" in
+  start)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
+	do_start
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  stop)
+	[ "$VERBOSE" != no ] && log_daemon_msg "Stopping $DESC" "$NAME"
+	do_stop
+	case "$?" in
+		0|1) [ "$VERBOSE" != no ] && log_end_msg 0 ;;
+		2) [ "$VERBOSE" != no ] && log_end_msg 1 ;;
+	esac
+	;;
+  status)
+	status_of_proc "$DAEMON" "$NAME" && exit 0 || exit $?
+	;;
+  restart|force-reload)
+	log_daemon_msg "Restarting $DESC" "$NAME"
+	do_stop
+	case "$?" in
+	  0|1)
+		do_start
+		case "$?" in
+			0) log_end_msg 0 ;;
+			1) log_end_msg 1 ;;
+			*) log_end_msg 1 ;;
+		esac
+		;;
+	  *)
+		log_end_msg 1
+		;;
+	esac
+	;;
+  *)
+	echo "Usage: $SCRIPTNAME {start|stop|status|restart|force-reload}" >&2
+	exit 3
+	;;
+esac
+
+:
