@@ -218,6 +218,7 @@ k_startup() {
 }
 
 k_cleanup() {
+	k_log 0 "ending"
 	k_hook_call_handlers on_app_ending
 	k_hook_call_handlers on_app_ended
 	rm $K_PID_FILE || \
