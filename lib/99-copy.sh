@@ -36,13 +36,13 @@ k_copy_all() {
 	time_start=$(k_now)
 	find "$source" -type f 2>/dev/null | grep -v '/\.' | grep -v '/Kopimi/' > $K_COPY_TEMP_FILE
 	count=$(cat $K_COPY_TEMP_FILE | wc -l)
-	k_log 3 "copying, mode: $mode, source: '$source', found $count files"
+	k_log 2 "copying, mode: $mode, source: '$source', found $count files"
 	index=1
 	if [ $count -gt 0 ]; then
 		while [ 1 ]; do
 			source=$(cat $K_COPY_TEMP_FILE | tail -n -$index | head -n 1)
 			if [ -e "$source" ]; then
-				k_log 3 "copying, mode: $mode, source: '$source', target: '$target'"
+				k_log 2 "copying, mode: $mode, source: '$source', target: '$target'"
 				k_hook_call_handlers on_copy "$mode" "$source"
 				rsync -aq "$source" "$target/" >/dev/null 2>&1
 			fi
@@ -74,7 +74,7 @@ k_copy_random() {
 	time_start=$(k_now)
 	find "$source" -type f 2>/dev/null | grep -v '/\.' | grep -v '/Kopimi/' > $K_COPY_TEMP_FILE
 	count=$(cat $K_COPY_TEMP_FILE | wc -l)
-	k_log 3 "copying, mode: $mode, source: '$source', found $count files"
+	k_log 2 "copying, mode: $mode, source: '$source', found $count files"
 	if [ $count -gt 0 ]; then
 		while [ 1 ]; do
 			if [ -n "$K_RANDOM" ]; then
@@ -85,7 +85,7 @@ k_copy_random() {
 				source=$(cat $K_COPY_TEMP_FILE | tail -n -$index | head -n 1)
 			fi
 			if [ -e "$source" ]; then
-				k_log 3 "copying, mode: $mode, source: '$source', target: '$target'"
+				k_log 2 "copying, mode: $mode, source: '$source', target: '$target'"
 				k_hook_call_handlers on_copy "$mode" "$source"
 				rsync -aq "$source" "$target/" >/dev/null 2>&1
 			fi
