@@ -160,6 +160,7 @@ k_startup() {
 
 	if [ -n "$K_OPT_LOG_LEVEL" ]; then
 		K_LOG_LEVEL=$K_OPT_LOG_LEVEL
+	fi
 	if [ -n "$K_OPT_LOG_FILE" ]; then
 		K_LOG_FILE=$K_OPT_LOG_FILE
 	elif [ -z "$K_LOG_FILE" ]; then
