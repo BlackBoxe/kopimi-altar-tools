@@ -34,7 +34,7 @@ k_copy_all() {
 	time_limit=$4
 
 	time_start=$(k_now)
-	find "$source" -type f 2>/dev/null | grep -v '/\.' > $K_COPY_TEMP_FILE
+	find "$source" -type f 2>/dev/null | grep -v '/\.' | grep -v '/Kopimi/' > $K_COPY_TEMP_FILE
 	count=$(cat $K_COPY_TEMP_FILE | wc -l)
 	k_log 3 "copying, mode: $mode, source: '$source', found $count files"
 	index=1
@@ -72,7 +72,7 @@ k_copy_random() {
 	time_limit=$4
 
 	time_start=$(k_now)
-	find "$source" -type f 2>/dev/null | grep -v '/\.' > $K_COPY_TEMP_FILE
+	find "$source" -type f 2>/dev/null | grep -v '/\.' | grep -v '/Kopimi/' > $K_COPY_TEMP_FILE
 	count=$(cat $K_COPY_TEMP_FILE | wc -l)
 	k_log 3 "copying, mode: $mode, source: '$source', found $count files"
 	if [ $count -gt 0 ]; then
