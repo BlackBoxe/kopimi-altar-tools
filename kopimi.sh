@@ -232,25 +232,23 @@ k_cleanup() {
 k_loop() {
 	while [ $K_IS_ALIVE -gt 0 ]; do
 		k_log 2 "waiting for event"
-		if read PROTO ACTION MESSAGE < $K_NOTIFY_FIFO 2>/dev/null ; then
+		if read PROTO ACTION TYPE DEVICE STATE < $K_NOTIFY_FIFO 2>/dev/null ; then
 			k_log 3 "received event! Protocol: $PROTO, Action: $ACTION"
 			if [ $PROTO = "KOPIMI/0.1" ]; then
 				if [ $ACTION = "NOTIFY" ]; then
-					echo "$MESSAGE" | while read TYPE DEVICE STATE; do
-						if [ $TYPE = "USB-STORAGE" ]; then
-							if [ $STATE = "ADDED" ]; then
-								k_log 2 "USB device '$DEVICE' plugged"
-								k_hook_call_handlers on_media_plugged "$DEVICE"
-							elif [ $STATE = "REMOVED" ]; then 
-								k_log 2 "USB device '$DEVICE' removed"
-								k_hook_call_handlers on_media_removed "$DEVICE"
-							else
-								k_log 1 "ERROR: unknown USB <device state '$STATE'"
-							fi
+					if [ $TYPE = "USB-STORAGE" ]; then
+						if [ $STATE = "ADDED" ]; then
+							k_log 2 "USB device '$DEVICE' plugged"
+							k_hook_call_handlers on_media_plugged "$DEVICE"
+						elif [ $STATE = "REMOVED" ]; then 
+							k_log 2 "USB device '$DEVICE' removed"
+							k_hook_call_handlers on_media_removed "$DEVICE"
 						else
-							k_log 1 "ERROR: unknown device type '$TYPE'"
+							k_log 1 "ERROR: unknown USB device state '$STATE'"
 						fi
-					done
+					else
+						k_log 1 "ERROR: unknown device type '$TYPE'"
+					fi
 				elif [ $ACTION = "QUIT" ]; then
 					K_IS_ALIVE=0
 				else
