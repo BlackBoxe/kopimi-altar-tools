@@ -11,6 +11,7 @@
 
 # Author: Nico <nico@blackboxe.org>
 
+PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games
 DESC="Kopimi Altar daemon"
 NAME=kopimi.sh
 DAEMON=/opt/kopimi/$NAME
