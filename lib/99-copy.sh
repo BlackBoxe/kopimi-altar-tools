@@ -9,7 +9,7 @@ k_get_mp() {
 	device="$1"
 
 	k_log 3 "waiting 5 seconds for device '$device' to settle..."
-	for n in 1 2 3 4 5; do
+	for n in 0 1 2 3 4 5 6 7 8 9; do
 		mp=$(cat /proc/mounts | grep "^$device" | cut -d ' ' -f 2)
 		if [ -n "$mp" ]; then
 			k_log 3 "device '$d' mounted on '$mp'"
