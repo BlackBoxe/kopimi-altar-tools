@@ -127,6 +127,8 @@ k_copy() {
 }
 
 k_copy_startup() {
+	# try to use 'random' command from bsdgames if available
+	K_RANDOM="$(which random)"
 	k_hook_register_handler on_media_plugged k_copy
 }
 
