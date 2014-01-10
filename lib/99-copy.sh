@@ -2,6 +2,14 @@
 
 K_COPY_COUNT=0
 
+k_copy_count_load() {
+	K_COPY_COUNT=$(cat $K_COPY_COUNT_FILE)
+}
+
+k_copy_count_save() {
+	echo "$K_COPY_COUNT" >$K_COPY_COUNT_FILE
+}
+
 k_get_mp() {
 	local device
 	local mp
@@ -121,12 +129,15 @@ k_copy() {
 			k_log 2 "syncing"
 			sync
 			k_log 2 "media '$device', copy #$K_COPY_COUNT done!"
+			k_copy_count_save
 			k_hook_call_handlers on_copy_ended "$K_COPY_COUNT" "$mp"
 		fi
 	done
 }
 
 k_copy_startup() {
+	[ -r "$K_COPY_COUNT_FILE" ] && \
+		k_copy_count_load
 	# try to use 'random' command from bsdgames if available
 	K_RANDOM="$(which random)"
 	k_hook_register_handler on_media_plugged k_copy
