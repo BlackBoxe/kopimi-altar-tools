@@ -115,11 +115,8 @@ k_copy() {
 			k_log 2 "media '$device', copy #$K_COPY_COUNT started..."
 			k_hook_call_handlers on_copy_started "$K_COPY_COUNT" "$mp"
 			k_copy_all "OUTGOING-ALWAYS" "$K_DATA_DIR/outgoing/always" "$mp/Kopimi"
-			sync
 			k_copy_random "OUTGOING-RANDOM" "$K_DATA_DIR/outgoing/random" "$mp/Kopimi" $K_COPY_OUTGOING_TIME_LIMIT
-			sync
 			k_copy_random "OUTGOING-SHARED" "$K_DATA_DIR/incoming" "$mp/Kopimi" $K_COPY_OUTGOING_TIME_LIMIT
-			sync
 			k_copy_random "INCOMING" "$mp" "$K_DATA_DIR/incoming" $K_COPY_INCOMING_TIME_LIMIT
 			sync
 			k_log 2 "media '$device', copy #$K_COPY_COUNT done!"
