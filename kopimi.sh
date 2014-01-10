@@ -192,16 +192,10 @@ k_startup() {
 	mkfifo $K_NOTIFY_FIFO || \
 		k_log 1 "ERROR: creating fifo '$K_NOTIFY_FIFO'"
 
-#	K_TMP_DIR=$(mktemp -d $K_RUN_DIR/kopimi-XXXXXX) \
-#		|| k_error "can't create tmp directory in '$K_RUN_DIR'"
-#	cd $K_TMP_DIR >/dev/null 2>&1 \
-#		|| k_error "can't use tmp directory '$K_TMP_DIR'"
-
 	k_log 0 "starting"
 	k_log 1 "using config file: $K_CONFIG_FILE"
 	k_log 1 "using lib directory: $K_LIB_DIR"
 	k_log 1 "using run directory: $K_RUN_DIR"
-#	k_log 1 "using tmp directory: $K_TMP_DIR"
 
 	for M in $K_LIB_DIR/[0-9][0-9]-*.sh; do
 		k_log 1 "loading module: $M"
