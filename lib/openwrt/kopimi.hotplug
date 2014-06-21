@@ -1,0 +1,17 @@
+is_disk() {
+  [ "$DEVTYPE" == "disk" ]
+}
+
+is_usb() {
+  echo "$DEVPATH" | grep -qs "usb"
+}
+
+if [ "$ACTION" == "add" ]; then
+  if is_disk && is_usb; then
+    /opt/kopimi/lib/notify-helper.sh add USB-STORAGE /dev/$DEVNAME
+  fi
+elif [ "$ACTION" == "remove" ]; then
+  if is_disk && is_usb; then
+    /opt/kopimi/lib/notify-helper.sh remove USB-STORAGE /dev/$DEVNAME
+  fi
+fi
