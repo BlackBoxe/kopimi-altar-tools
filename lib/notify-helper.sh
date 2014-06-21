@@ -15,10 +15,10 @@ k_notify() {
 
 	action="$1"
 
-	[ -n "$K_NOTIFY_FIFO" ] || \
+	[ -n "$K_CTL_FIFO" ] || \
 		return
-	[ -p "$K_NOTIFY_FIFO" ] && \
-		echo "KOPIMI/0.1 NOTIFY $TYPE $DEVICE $action" > $K_NOTIFY_FIFO
+	[ -p "$K_CTL_FIFO" ] && \
+		echo "KOPIMI/0.1 NOTIFY $TYPE $DEVICE $action" > $K_CTL_FIFO
 }
 
 if [ "$ACTION" = "add" ]; then

@@ -1,6 +1,6 @@
 # udev.rules
 
-ACTION=="add",    ENV{ID_BUS}=="usb", ENV{ID_USB_DRIVER}=="usb-storage", ENV{DEVTYPE}=="disk", RUN+="/opt/kopimi/lib/udev/helper.sh add USB-STORAGE %E{DEVNAME}"
+ACTION=="add",    ENV{ID_BUS}=="usb", ENV{ID_USB_DRIVER}=="usb-storage", ENV{DEVTYPE}=="disk", RUN+="/opt/kopimi/lib/notify-helper.sh add USB-STORAGE %E{DEVNAME}"
 
-ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_USB_DRIVER}=="usb-storage", ENV{DEVTYPE}=="disk", RUN+="/opt/kopimi/lib/udev/helper.sh remove USB-STORAGE %E{DEVNAME}"
+ACTION=="remove", ENV{ID_BUS}=="usb", ENV{ID_USB_DRIVER}=="usb-storage", ENV{DEVTYPE}=="disk", RUN+="/opt/kopimi/lib/notify-helper.sh remove USB-STORAGE %E{DEVNAME}"
 
