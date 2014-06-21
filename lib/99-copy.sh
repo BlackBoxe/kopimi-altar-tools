@@ -90,8 +90,7 @@ k_copy_random() {
 			if [ -n "$K_RANDOM" ]; then
 				source=$(cat $K_COPY_TEMP_FILE | $K_RANDOM $count)
 			else
-				rand=$(date +%s)
-				index=$((($rand % $count) + 1))
+				index=$((($RANDOM % $count) + 1))
 				source=$(cat $K_COPY_TEMP_FILE | tail -n -$index | head -n 1)
 			fi
 			if [ -e "$source" ]; then
