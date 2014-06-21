@@ -127,9 +127,11 @@ k_copy() {
 			k_copy_random "INCOMING" "$mp" "$K_DATA_DIR/incoming" $K_COPY_INCOMING_TIME_LIMIT
 			k_log 2 "syncing"
 			sync
+			umount $mp
 			k_log 2 "media '$device', copy #$K_COPY_COUNT done!"
+			k_hook_call_handlers on_copy_ended "$K_COPY_COUNT"
 			k_copy_count_save
-			k_hook_call_handlers on_copy_ended "$K_COPY_COUNT" "$mp"
+			return
 		fi
 	done
 }
