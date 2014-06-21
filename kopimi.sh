@@ -146,6 +146,7 @@ k_rel2abs() {
 k_startup() {
 	K_IS_ALIVE=1
 	K_TIME_START=$(k_now)
+	RANDOM=$K_TIME_START
 
 	if [ -n "$K_OPT_CONFIG_FILE" ]; then
 		K_CONFIG_FILE=$K_OPT_CONFIG_FILE
@@ -189,8 +190,9 @@ k_startup() {
 		|| k_error "can't create run directory '$K_RUN_DIR'"
 	K_RUN_DIR=$(k_rel2abs $K_RUN_DIR)
 
-	mkfifo $K_NOTIFY_FIFO || \
-		k_log 1 "ERROR: creating fifo '$K_NOTIFY_FIFO'"
+	[ -p "$K_CTL_FIFO" ] \
+		|| mkfifo $K_CTL_FIFO \
+			|| k_log 1 "ERROR: creating fifo '$K_CTL_FIFO'"
 
 	k_log 0 "starting"
 	k_log 1 "using config file: $K_CONFIG_FILE"
@@ -218,15 +220,17 @@ k_cleanup() {
 	k_hook_call_handlers on_app_ended
 	rm $K_PID_FILE || \
 		k_log 1 "ERROR: removing pid-file '$K_PID_FILE'"
-	rm $K_NOTIFY_FIFO || \
-		k_log 1 "ERROR: removing fifo '$K_NOTIFY_FIFO'"
+	rm $K_CTL_FIFO || \
+		k_log 1 "ERROR: removing fifo '$K_CTL_FIFO'"
 	k_log 0 "ended"
 }
 
 k_loop() {
+	local timeout
 	while [ $K_IS_ALIVE -gt 0 ]; do
-		k_log 2 "waiting for event"
-		if read PROTO ACTION TYPE DEVICE STATE < $K_NOTIFY_FIFO 2>/dev/null ; then
+		timeout=$(($RANDOM % ($K_IDLE_TIMEOUT_MAX - $K_IDLE_TIMEOUT_MIN) + $K_IDLE_TIMEOUT_MIN))
+		k_log 2 "waiting for event for $timeout seconds"
+		if read -t $timeout PROTO ACTION TYPE DEVICE STATE <> $K_CTL_FIFO ; then
 			k_log 3 "received event! Protocol: $PROTO, Action: $ACTION"
 			if [ $PROTO = "KOPIMI/0.1" ]; then
 				if [ $ACTION = "NOTIFY" ]; then
@@ -251,6 +255,8 @@ k_loop() {
 			else
 				k_log 1 "ERROR: unknown protocol '$PROTO'"
 			fi
+		else
+			k_hook_call_handlers on_idle
 		fi
 	done
 }

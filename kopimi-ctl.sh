@@ -11,10 +11,10 @@ k_start() {
 }
 
 k_stop() {
-	[ -n "$K_NOTIFY_FIFO" ] || \
+	[ -n "$K_CTL_FIFO" ] || \
 		return
-	[ -p "$K_NOTIFY_FIFO" ] && \
-		echo "KOPIMI/0.1 QUIT" > $K_NOTIFY_FIFO
+	[ -p "$K_CTL_FIFO" ] && \
+		echo "KOPIMI/0.1 QUIT" > $K_CTL_FIFO
 }
 
 case $K_ACTION in
