@@ -45,6 +45,7 @@ k_leds_startup() {
 	k_hook_register_handler on_media_removed k_leds_pulse
 	k_hook_register_handler on_copy_started k_leds_blink
 	k_hook_register_handler on_copy_ended k_leds_on
+	k_hook_register_handler on_app_ended k_leds_off
 }
 
 k_hook_register_handler on_app_started k_leds_startup
