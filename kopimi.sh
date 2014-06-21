@@ -120,7 +120,7 @@ k_log() {
 	m=$(($t / 60))
 	s=$(($t % 60))
 	time_str=$(printf "%.2d:%.2d:%.2d" $h $m $s)
-	echo "$K_ME [$time_str]: $@" >>$K_LOG_FILE
+	echo "$K_ME [$time_str][$level]: $@" >>$K_LOG_FILE
 }
 
 k_rel2abs() {
