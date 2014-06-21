@@ -4,7 +4,7 @@ k_leds_init() {
 	[ -c "$K_LEDS_SERIAL_PORT" ] || \
 		return 1
 	k_log 3 "initializing leds serial port"
-	stty -F $K_LEDS_SERIAL_PORT $K_LEDS_SERIAL_BAUD_RATE cs8 -cstopb || {\
+	stty -F $K_LEDS_SERIAL_PORT $K_LEDS_SERIAL_BAUD_RATE cs8 -cstopb -parenb || {\
 		k_log 1 "ERROR: error initializing leds serial port"
 		return 1
 	}
