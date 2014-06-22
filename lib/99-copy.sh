@@ -48,20 +48,18 @@ k_copy_all() {
 	count=$(cat $K_COPY_TEMP_FILE | wc -l)
 	k_log 2 "copying, mode: $mode, source: '$source', found $count files"
 	index=1
-	if [ $count -gt 0 ]; then
-		while [ 1 ]; do
-			source=$(cat $K_COPY_TEMP_FILE | tail -n -$index | head -n 1)
-			if [ -e "$source" ]; then
-				k_log 2 "copying, mode: $mode, source: '$source', target: '$target'"
-				k_hook_call_handlers on_copy "$mode" "$source"
-				rsync -aq "$source" "$target/" >/dev/null 2>&1
-			fi
-			time=$(k_now)
-			time_elapsed=$(($time - $time_start))
-			[ $time_elapsed -ge $time_limit ] && break
-			index=$(($index + 1))
-		done
-	fi
+	while [ $index -le $count ]; do
+		source=$(cat $K_COPY_TEMP_FILE | tail -n -$index | head -n 1)
+		if [ -e "$source" ]; then
+			k_log 2 "copying, mode: $mode, source: '$source', target: '$target'"
+			k_hook_call_handlers on_copy "$mode" "$source"
+			rsync -aq "$source" "$target/" >/dev/null 2>&1
+		fi
+		time=$(k_now)
+		time_elapsed=$(($time - $time_start))
+		[ $time_elapsed -ge $time_limit ] && break
+		index=$(($index + 1))
+	done
 }
 
 k_copy_random() {
