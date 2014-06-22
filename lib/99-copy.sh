@@ -112,7 +112,7 @@ k_copy() {
 	device="$1"
 
 	k_log 3 "media '$device' plugged, scanning partitions..."
-	for d in $device[1-9]; do
+	for d in $device $device[1-9]; do
 		k_log 3 "media '$device', partition '$d' found!"
 		mp=$(k_get_mp $d)
 		if [ -n "$mp" ]; then
