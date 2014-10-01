@@ -10,6 +10,7 @@ OpenWrt
 Build config options
 --------------------
 
+```
 CONFIG_PACKAGE_block-mount=y
 CONFIG_BUSYBOX_CUSTOM=y
 CONFIG_BUSYBOX_CONFIG_ASH_RANDOM_SUPPORT=y
@@ -29,21 +30,24 @@ CONFIG_PACKAGE_kmod-usb-serial=y
 CONFIG_PACKAGE_kmod-usb-serial-ftdi=y
 CONFIG_PACKAGE_kmod-usb-storage=y
 CONFIG_PACKAGE_kmod-usb2=y
-
+```
 
 Configure auto-mounting of KOPIMI partition
 -------------------------------------------
 
+```
 uci set fstab.kopimi=mount
 uci set fstab.kopimi.target=/opt/kopimi
 uci set fstab.kopimi.label=KOPIMI
 uci set fstab.kopimi.enabled=1
 
 mkdir -p /opt/kopimi
-
+```
 
 Configure auto-mounting of foreign USB sticks
 ---------------------------------------------
 
+```
 uci set fstab.@global[0].anon_mount=1
+```
 
