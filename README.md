@@ -32,8 +32,17 @@ CONFIG_PACKAGE_kmod-usb-storage=y
 CONFIG_PACKAGE_kmod-usb2=y
 ```
 
-Configure auto-mounting of KOPIMI partition
--------------------------------------------
+Installation
+------------
+
+1. Configure auto-mounting of foreign USB sticks
+
+```
+uci set fstab.@global[0].anon_mount=1
+uci commit
+```
+
+2. Configure auto-mounting of KOPIMI partition
 
 ```
 uci set fstab.kopimi=mount
@@ -45,11 +54,21 @@ uci commit
 mkdir -p /opt/kopimi
 ```
 
-Configure auto-mounting of foreign USB sticks
----------------------------------------------
+3. Restart
 
 ```
-uci set fstab.@global[0].anon_mount=1
-uci commit
+reboot ; exit
 ```
 
+4. Install hotplug handler
+
+```
+cp -a /opt/kopimi/lib/openwrt/kopimi.hotplug /etc/hotplug.d/99-kopimi-altar-tools
+```
+
+5. Install init script & enable it
+
+```
+cp -a /opt/kopimi/lib/openwrt/kopimi.init /etc/init.d/kopimi
+/etc/init.d/kopimi enable
+```
