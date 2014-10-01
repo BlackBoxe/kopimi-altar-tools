@@ -40,6 +40,7 @@ uci set fstab.kopimi=mount
 uci set fstab.kopimi.target=/opt/kopimi
 uci set fstab.kopimi.label=KOPIMI
 uci set fstab.kopimi.enabled=1
+uci commit
 
 mkdir -p /opt/kopimi
 ```
@@ -49,5 +50,6 @@ Configure auto-mounting of foreign USB sticks
 
 ```
 uci set fstab.@global[0].anon_mount=1
+uci commit
 ```
 
