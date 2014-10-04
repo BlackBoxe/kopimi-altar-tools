@@ -229,7 +229,7 @@ k_loop() {
 	local timeout
 	while [ $K_IS_ALIVE -gt 0 ]; do
 		timeout=$(($RANDOM % ($K_IDLE_TIMEOUT_MAX - $K_IDLE_TIMEOUT_MIN) + $K_IDLE_TIMEOUT_MIN))
-		k_log 2 "waiting for event for $timeout seconds"
+		k_log 3 "waiting for event for $timeout seconds"
 		if read -t $timeout PROTO ACTION TYPE DEVICE STATE <> $K_CTL_FIFO ; then
 			k_log 3 "received event! Protocol: $PROTO, Action: $ACTION"
 			if [ $PROTO = "KOPIMI/0.1" ]; then
