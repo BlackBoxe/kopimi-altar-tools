@@ -35,6 +35,39 @@ CONFIG_PACKAGE_kmod-usb2=y
 Installation
 ------------
 
+1. Copy the build image to the µSD
+
+```
+dd if=bin/sunxi/openwrt-sunxi-A10-OLinuXino-Lime-sdcard-vfat-ext4.img of=/dev/sdX
+```
+
+2. Sync, eject the µSD
+
+3. Create a 3rd partion on the µSD with your favorite tool
+
+4. Format it to ext4 with a label of your choice
+
+```
+mkfs.ext4 -L KOPIMI-DATA /dev/sdX3
+```
+
+5. Mount it
+
+```
+mkdir /media/KOPIMI-DATA
+mount /dev/sdX3 /media/KOPIMI-DATA
+```
+
+6. Populate with the code
+
+```
+rsync -a ./kopimi-altar-tools/ /media/KOPIMI-DATA/
+```
+
+
+Configuration
+-------------
+
 1. Configure auto-mounting of foreign USB sticks
 
 ```
@@ -47,7 +80,7 @@ uci commit
 ```
 uci set fstab.kopimi=mount
 uci set fstab.kopimi.target=/opt/kopimi
-uci set fstab.kopimi.label=KOPIMI
+uci set fstab.kopimi.label=KOPIMI-DATA
 uci set fstab.kopimi.enabled=1
 uci commit
 
@@ -63,7 +96,7 @@ reboot ; exit
 4. Install hotplug handler
 
 ```
-cp -a /opt/kopimi/lib/openwrt/kopimi.hotplug /etc/hotplug.d/99-kopimi-altar-tools
+cp -a /opt/kopimi/lib/openwrt/kopimi.hotplug /etc/hotplug.d/block/99-kopimi
 ```
 
 5. Install init script & enable it
