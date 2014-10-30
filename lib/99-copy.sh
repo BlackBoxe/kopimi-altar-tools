@@ -3,11 +3,17 @@
 K_COPY_COUNT=0
 
 k_copy_count_load() {
+	[ -n "$K_COPY_COUNT_FILE" ] || \
+		return
+	[ -r "$K_COPY_COUNT_FILE" ] && \
 	K_COPY_COUNT=$(cat $K_COPY_COUNT_FILE)
 }
 
 k_copy_count_save() {
-	echo "$K_COPY_COUNT" >$K_COPY_COUNT_FILE
+	[ -n "$K_COPY_COUNT_FILE" ] || \
+		return
+	[ -w "$K_COPY_COUNT_FILE" ] && \
+		echo "$K_COPY_COUNT" >$K_COPY_COUNT_FILE
 }
 
 k_get_mp() {
