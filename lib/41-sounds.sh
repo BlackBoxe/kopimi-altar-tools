@@ -36,6 +36,8 @@ k_snd_on_idle() {
 }
 
 k_snd_init() {
+	[ -n "$K_SND_DEVICE" ] || \
+		return 1
 	k_log 3 "initializing sound support"
 	[ -c "$K_SND_DEVICE" ] || {
 		k_log 3 "WARNING: sound support not found"
