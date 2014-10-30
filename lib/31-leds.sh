@@ -1,9 +1,13 @@
 # leds
 
 k_leds_init() {
-	[ -c "$K_LEDS_SERIAL_PORT" ] || \
+	[ -n "$K_LEDS_SERIAL_PORT" ] || \
 		return 1
 	k_log 3 "initializing leds serial port"
+	[ -c "$K_LEDS_SERIAL_PORT" ] || { \
+		k_log 3 "WARNING: lels serial port not found or not usable"
+		return 1
+	}
 	stty -F $K_LEDS_SERIAL_PORT $K_LEDS_SERIAL_BAUD_RATE cs8 -cstopb -parenb || {\
 		k_log 1 "ERROR: error initializing leds serial port"
 		return 1
