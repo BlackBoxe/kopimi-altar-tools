@@ -5,10 +5,11 @@ enum {
   S_PULSE=3
 };
 
-const int LED = 12;
+const int LED = 13;
 const float GAMMA = 2.1;
-int timeON = 1000;
-int timeOFF = 0;
+const int TIME_ON = 1000;
+int pulse_index = 0;
+int pulse_inc = +1;
 int state = S_PULSE;
 
 void blink() {
@@ -29,27 +30,17 @@ void out() {
 }
 
 void pulse() {
-  for(int i=0; i<timeON; i++){
-    float inc = (float) i;
-    timeOFF = pow( inc / timeON, GAMMA) * timeON;
-
-    if (timeOFF > 0){
-      digitalWrite(LED, HIGH);
-      delayMicroseconds(timeOFF);
-      digitalWrite(LED, LOW);
-      delayMicroseconds(timeON - timeOFF);
-    }
+  int time_on = pow((float)pulse_index / TIME_ON, GAMMA) * TIME_ON;
+  if (time_on > 0) {
+    digitalWrite(LED, HIGH);
+    delayMicroseconds(time_on);
+    digitalWrite(LED, LOW);
+    delayMicroseconds(TIME_ON - time_on);
   }
-  for(int i=timeON - 1; i>=0; i--){
-    float inc = (float) i;
-    timeOFF = pow( inc / timeON, GAMMA) * timeON;
-
-    if (timeOFF > 0){
-      digitalWrite(LED, HIGH);
-      delayMicroseconds(timeOFF);
-      digitalWrite(LED, LOW);
-      delayMicroseconds(timeON - timeOFF);
-    }
+  pulse_index += pulse_inc;
+  if ((pulse_index < 0) || (pulse_index > (TIME_ON - 1))) {
+    pulse_inc *= -1;
+    pulse_index += pulse_inc;
   }
 }
 
@@ -59,17 +50,18 @@ void setup() {
 }
 
 void loop() {
-  char c;
   while( Serial.available() ) {
-    c = Serial.read();
+    char c = Serial.read();
     switch(c) {
       case 'B':
         state = S_BLINK;
         break;
       case 'I':
+        in();
         state = S_IN;
         break;
       case 'O':
+        out();
         state = S_OUT;
         break;
       case 'P':
@@ -80,12 +72,6 @@ void loop() {
   switch(state) {
     case S_BLINK:
       blink();
-      break;
-    case S_IN:
-      in();
-      break;
-    case S_OUT:
-      out();
       break;
     case S_PULSE:
       pulse();
