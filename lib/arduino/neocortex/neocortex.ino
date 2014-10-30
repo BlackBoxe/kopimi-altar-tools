@@ -47,8 +47,7 @@ void led_pulse() {
 }
 
 void but_test() {
-  Serial.print(but_pressed);
-  Serial.write('\n');
+  Serial.println(but_pressed);
   if (but_pressed) {
     but_pressed = 0;
   }
