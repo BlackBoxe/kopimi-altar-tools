@@ -244,6 +244,13 @@ k_loop() {
 						else
 							k_log 1 "ERROR: unknown USB device state '$STATE'"
 						fi
+					elif [ $TYPE = "BUTTON" ]; then
+						if [ $STATE = "PRESSED" ]; then
+							k_log 2 "button '$DEVICE' pressed"
+							k_hook_call_handlers on_button_pressed "$DEVICE"
+						else
+							k_log 1 "ERROR: unknown button state '$STATE'"
+						fi
 					else
 						k_log 1 "ERROR: unknown device type '$TYPE'"
 					fi
