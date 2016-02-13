@@ -51,12 +51,23 @@ k_neocortex_led_blink() {
 
 k_neocortex_led_on() {
 	k_log 3 "neocortex: led on"
-	k_neocortex_send 'I'
+	k_neocortex_send '1'
 }
 
 k_neocortex_led_off() {
 	k_log 3 "neocortex: led off"
-	k_neocortex_send 'O'
+	k_neocortex_send '0'
+}
+
+k_neocortex_led_copy() {
+	local mode
+	mode="$1"
+	k_log 3 "neocortex: led copy"
+	if [ "$mode" = "INCOMING" ]; then
+		k_neocortex_send 'I'
+	else
+		k_neocortex_send 'O'
+	fi
 }
 
 k_neocortex_led_pulse() {
@@ -72,6 +83,7 @@ k_neocortex_startup() {
 	k_hook_register_handler on_media_plugged k_neocortex_led_off
 	k_hook_register_handler on_media_removed k_neocortex_led_pulse
 	k_hook_register_handler on_copy_started k_neocortex_led_blink
+	k_hook_register_handler on_copy k_neocortex_led_copy
 	k_hook_register_handler on_copy_ended k_neocortex_led_on
 	k_hook_register_handler on_video_capture_started k_neocortex_led_on
 	k_hook_register_handler on_video_capture_ended k_neocortex_led_pulse

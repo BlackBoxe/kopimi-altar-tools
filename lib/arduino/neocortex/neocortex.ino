@@ -66,11 +66,11 @@ void loop() {
       case 'B':
         led_state = LED_BLINK;
         break;
-      case 'I':
+      case '1':
         led_in();
         led_state = LED_IN;
         break;
-      case 'O':
+      case '0':
         led_out();
         led_state = LED_OUT;
         break;
