@@ -11,7 +11,14 @@ Build config options
 --------------------
 
 ```
+scripts/feeds update
+scripts/feeds install -d y file fswebcam rsync sox
+```
+
+```
 CONFIG_PACKAGE_block-mount=y
+CONFIG_PACKAGE_file=y
+CONFIG_PACKAGE_fswebcam=y
 CONFIG_BUSYBOX_CUSTOM=y
 CONFIG_BUSYBOX_CONFIG_ASH_RANDOM_SUPPORT=y
 CONFIG_BUSYBOX_CONFIG_STTY=y
@@ -30,32 +37,37 @@ CONFIG_PACKAGE_kmod-usb-serial=y
 CONFIG_PACKAGE_kmod-usb-serial-ftdi=y
 CONFIG_PACKAGE_kmod-usb-storage=y
 CONFIG_PACKAGE_kmod-usb2=y
+CONFIG_PACKAGE_kmod-usb2=y
+CONFIG_PACKAGE_rsync=y
+CONFIG_PACKAGE_samba36-server=y
+CONFIG_PACKAGE_sox=y
 ```
+
 
 Installation
 ------------
 
-1. Copy the build image to the µSD
+* Copy the build image to the µSD
 ```
 dd if=bin/sunxi/openwrt-sunxi-A10-OLinuXino-Lime-sdcard-vfat-ext4.img of=/dev/sdX
 ```
 
-2. Sync, eject the µSD
+* Sync, eject the µSD
 
-3. Create a 3rd partion on the µSD with your favorite tool
+* Create a 3rd partion on the µSD with your favorite tool
 
-4. Format it to ext4 with a label of your choice
+* Format it to ext4 with a label of your choice
 ```
 mkfs.ext4 -L KOPIMI-DATA /dev/sdX3
 ```
 
-5. Mount it
+* Mount it
 ```
 mkdir /media/KOPIMI-DATA
 mount /dev/sdX3 /media/KOPIMI-DATA
 ```
 
-6. Populate with the code
+* Populate with the code
 ```
 rsync -a ./kopimi-altar-tools/ /media/KOPIMI-DATA/
 ```
@@ -64,13 +76,13 @@ rsync -a ./kopimi-altar-tools/ /media/KOPIMI-DATA/
 Configuration
 -------------
 
-1. Configure auto-mounting of foreign USB sticks
+* Configure auto-mounting of foreign USB sticks
 ```
 uci set fstab.@global[0].anon_mount=1
 uci commit
 ```
 
-2. Configure auto-mounting of KOPIMI partition
+* Configure auto-mounting of KOPIMI partition
 ```
 uci set fstab.kopimi=mount
 uci set fstab.kopimi.target=/opt/kopimi
@@ -81,18 +93,38 @@ uci commit
 mkdir -p /opt/kopimi
 ```
 
-3. Restart
+* Restart
 ```
 reboot ; exit
 ```
 
-4. Install hotplug handler
+* Install hotplug handler
 ```
 cp -a /opt/kopimi/lib/openwrt/kopimi.hotplug /etc/hotplug.d/block/99-kopimi
 ```
 
-5. Install init script & enable it
+* Install init script & enable it
 ```
 cp -a /opt/kopimi/lib/openwrt/kopimi.init /etc/init.d/kopimi
 /etc/init.d/kopimi enable
+```
+
+* Configure DHCP - Don't act as a gateway (do not advertise a default route)
+```
+uci add_list dhcp.lan.dhcp_option='3'
+uci commit
+```
+
+* Configure Samba
+```
+uci set samba.@samba[0].name='KOPIMI-6'
+uci set samba.@samba[0].workgroup='KOPIMI'
+uci set samba.@samba[0].description='Kopimi Box #6'
+uci set samba.@samba[0].homes='0'
+uci add samba sambashare
+uci set samba.@sambashare[0].name='kopimi'
+uci set samba.@sambashare[0].path='/opt/kopimi'
+uci set samba.@sambashare[0].guest_ok='1'
+uci set samba.@sambashare[0].read_only='0'
+uci commit
 ```
